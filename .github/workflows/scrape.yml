@@ -4,7 +4,9 @@ on:
   schedule:
     - cron: "*/45 * * * *"  # Alle 45 Minuten
   workflow_dispatch:  # Ermöglicht manuelles Auslösen des Workflows
-
+  push:
+    branches:
+      - main 
 jobs:
   scrape:
     runs-on: ubuntu-latest
