@@ -2,8 +2,8 @@ name: Scrape Products Every 45 Minutes
 
 on:
   schedule:
-    - cron: "*/45 * * * *"  # Alle 15 Minuten
-  workflow_dispatch:  # Ermöglicht manuelles Auslösen des Workflows
+    - cron: "*/45 * * * *"
+  workflow_dispatch:
 
 jobs:
   scrape:
@@ -26,6 +26,8 @@ jobs:
     - name: Set up Google Cloud credentials
       run: |
         echo "${{ secrets.FIREBASE_CREDENTIALS }}" > ./firebase-credentials.json
+        ls -la  # Debugging Schritt
+        head -n 5 firebase-credentials.json  # Überprüfe die ersten Zeilen der Datei
 
     - name: Run Scraping Script
       run: |
