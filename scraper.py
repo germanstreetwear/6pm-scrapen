@@ -16,8 +16,11 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 # Firebase initialisieren
 try:
-    # Lade die Firebase-Credentials aus der Umgebungsvariable
-    cred_dict = json.loads(os.getenv('FIREBASE_CREDENTIALS'))
+    firebase_credentials = os.getenv('FIREBASE_CREDENTIALS')
+    if not firebase_credentials:
+        raise ValueError("Die Umgebungsvariable FIREBASE_CREDENTIALS ist leer.")
+
+    cred_dict = json.loads(firebase_credentials)
     cred = credentials.Certificate(cred_dict)
     firebase_admin.initialize_app(cred)
     db = firestore.client()
@@ -25,6 +28,7 @@ try:
 except Exception as e:
     logging.error(f"Fehler bei der Firebase-Initialisierung: {e}")
     db = None
+
 
 
 
