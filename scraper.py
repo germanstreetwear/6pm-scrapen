@@ -1,4 +1,6 @@
 import logging
+import json
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
@@ -9,22 +11,21 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
-
-
 # Logging-Konfiguration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Firebase initialisieren
-# Firebase initialisieren
 try:
-    # Verwende die Datei, die vom GitHub Actions Workflow erstellt wird
-    cred = credentials.Certificate("firebase-credentials.json")
+    # Lade die Firebase-Credentials aus der Umgebungsvariable
+    cred_dict = json.loads(os.getenv('FIREBASE_CREDENTIALS'))
+    cred = credentials.Certificate(cred_dict)
     firebase_admin.initialize_app(cred)
     db = firestore.client()
     logging.info("Erfolgreich mit Firestore verbunden.")
 except Exception as e:
     logging.error(f"Fehler bei der Firebase-Initialisierung: {e}")
     db = None
+
 
 
 # Selenium WebDriver mit Headless-Option konfigurieren
