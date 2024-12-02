@@ -1,8 +1,9 @@
-name: Scrape Products Every 45 Minutes
+name: Scrape Products
 
 on:
-  schedule:
-    - cron: "*/45 * * * *"  # Alle 15 Minuten
+  push:
+    branches:
+      - main
   workflow_dispatch:  # Ermöglicht manuelles Auslösen des Workflows
 
 jobs:
@@ -23,13 +24,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Set up Google Cloud credentials
+    - name: Copy Firebase credentials to environment
       run: |
-        echo "${{ secrets.FIREBASE_CREDENTIALS }}" > ./firebase-credentials.json
+        # Kopiere Firebase-Credentials in das Arbeitsverzeichnis
+        cp credentials/shop-65d2e-firebase-adminsdk-3no14-dbe2e1f74a.json ./firebase-credentials.json
 
     - name: Run Scraping Script
       run: |
-        python scraper.py
+        python your_script.py
 
     - name: Clean up
-      run: rm -f ./firebase-credentials.json
+      run: rm -f firebase-credentials.json  # Entfernt die Firebase-Credentials-Datei nach der Ausführung
