@@ -1,33 +1,35 @@
-name: Run Product Scraper
+name: Scrape Products Every 45 Minutes
 
 on:
-  workflow_dispatch: # Manuelles Auslösen ermöglichen
   schedule:
-    - cron: '0 0 * * *' # Täglich um Mitternacht
+    - cron: "*/45 * * * *"  # Alle 15 Minuten
+  workflow_dispatch:  # Ermöglicht manuelles Auslösen des Workflows
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
+    - name: Set up Python environment
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.8'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Decode Firebase Key
-        run: |
-          echo "${{ secrets.FIREBASE_KEY }}" | base64 --decode > firebase_key.json
+    - name: Set up Google Cloud credentials
+      run: |
+        echo "${{ secrets.FIREBASE_CREDENTIALS }}" > ./firebase-credentials.json
 
-      - name: Run Scraper
-        run: |
-          python scraper.py
-        env:
-          FIREBASE_KEY_PATH: "./firebase_key.json"
+    - name: Run Scraping Script
+      run: |
+        python scraper.py
+
+    - name: Clean up
+      run: rm -f ./firebase-credentials.json
