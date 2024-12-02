@@ -1,5 +1,2 @@
 # Ignoriere das Verzeichnis mit den Firebase-Credentials
-credentials/
-
-# Oder ignoriere die Datei direkt
-shop-65d2e-firebase-adminsdk-3no14-dbe2e1f74a.json
+credentials/shop-65d2e-firebase-adminsdk-3no14-dbe2e1f74a.json
