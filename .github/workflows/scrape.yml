@@ -22,16 +22,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Debug Firebase Key
-        env:
-          FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
+      - name: Decode Firebase Key
         run: |
-          echo "Length of FIREBASE_KEY: ${#FIREBASE_KEY}"
-          echo "Starts with: ${FIREBASE_KEY:0:10}..."
-          echo "Ends with: ...${FIREBASE_KEY: -10}"
+          echo "${{ secrets.FIREBASE_KEY }}" | base64 --decode > firebase_key.json
 
       - name: Run Scraper
-        env:
-          FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
         run: |
           python scraper.py
+        env:
+          FIREBASE_KEY_PATH: "./firebase_key.json"
