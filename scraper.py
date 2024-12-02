@@ -14,8 +14,14 @@ from datetime import datetime, timezone
 # Logging-Konfiguration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Initialisiere Firebase mit der temporär erstellten JSON-Datei
-cred = credentials.Certificate('firebase-credentials.json')
+
+# Lade Firebase-Credentials aus der Umgebungsvariablen
+firebase_credentials = os.getenv("FIREBASE_CREDENTIALS")
+if not firebase_credentials:
+    raise ValueError("Firebase-Credentials fehlen. Stellen Sie sicher, dass die Umgebungsvariable FIREBASE_CREDENTIALS gesetzt ist.")
+
+# Konvertiere die JSON-Zeichenkette zu einem temporären Zertifikat
+cred = credentials.Certificate(json.loads(firebase_credentials))
 firebase_admin.initialize_app(cred)
 
 # Initialisiere Firestore
