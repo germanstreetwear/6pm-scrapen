@@ -14,16 +14,10 @@ from datetime import datetime, timezone
 # Logging-Konfiguration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Firebase initialisieren
-try:
-    cred = credentials.Certificate("shop-65d2e-firebase-adminsdk-3no14-dbe2e1f74a.json")
-    firebase_admin.initialize_app(cred)
-    db = firestore.client()
-    logging.info("Erfolgreich mit Firestore verbunden.")
-except Exception as e:
-    logging.error(f"Fehler bei der Firebase-Initialisierung: {e}")
-    db = None
 
+# Initialisiere Firebase mit der temporär erstellten JSON-Datei
+cred = credentials.Certificate('firebase-credentials.json')
+firebase_admin.initialize_app(cred)
 
 
 
