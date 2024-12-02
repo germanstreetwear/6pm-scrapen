@@ -16,12 +16,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 # Firebase initialisieren
 try:
-    firebase_credentials = os.getenv('FIREBASE_CREDENTIALS')
-    if not firebase_credentials:
-        raise ValueError("Die Umgebungsvariable FIREBASE_CREDENTIALS ist leer.")
-
-    cred_dict = json.loads(firebase_credentials)
-    cred = credentials.Certificate(cred_dict)
+    cred = credentials.Certificate("shop-65d2e-firebase-adminsdk-3no14-dbe2e1f74a.json")
     firebase_admin.initialize_app(cred)
     db = firestore.client()
     logging.info("Erfolgreich mit Firestore verbunden.")
