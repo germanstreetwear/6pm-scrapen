@@ -14,12 +14,12 @@ from datetime import datetime, timezone
 # Logging-Konfiguration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-
 # Initialisiere Firebase mit der temporär erstellten JSON-Datei
 cred = credentials.Certificate('firebase-credentials.json')
 firebase_admin.initialize_app(cred)
 
-
+# Initialisiere Firestore
+db = firestore.client()  # Jetzt wird db korrekt gesetzt
 
 # Selenium WebDriver mit Headless-Option konfigurieren
 options = Options()
@@ -31,6 +31,8 @@ options.add_argument('--disable-blink-features=AutomationControlled')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--disable-infobars')
 options.add_argument("--lang=de")
+
+# Der Rest deines Codes bleibt unverändert
 
 # Funktion, um alle Produkt-URLs von allen Seiten dynamisch zu sammeln
 def get_all_product_urls(base_url, category_url_template, selectors):
