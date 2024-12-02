@@ -31,7 +31,7 @@ jobs:
 
     - name: Run Scraping Script
       run: |
-        python your_script.py
+        python scraper.py
 
     - name: Clean up
       run: rm -f firebase-credentials.json  # Entfernt die Firebase-Credentials-Datei nach der Ausführung
