@@ -1,37 +1,37 @@
-name: Scrape Products
+name: Scrape Products and Update Firestore
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:  # Ermöglicht manuelles Auslösen des Workflows
+  workflow_dispatch: # Ermöglicht das manuelle Starten der Action
+  schedule:
+    - cron: '0 0 * * *' # Täglich um Mitternacht UTC
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python environment
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.8'
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Copy Firebase credentials to environment
-      run: |
-        # Kopiere Firebase-Credentials in das Arbeitsverzeichnis
-        cp credentials/shop-65d2e-firebase-adminsdk-3no14-dbe2e1f74a.json ./firebase-credentials.json
+      # Inject Firebase credentials
+      - name: Set up Firebase credentials
+        run: echo "${{ secrets.FIREBASE_CREDENTIALS }}" > firebase-credentials.json
 
-    - name: Run Scraping Script
-      run: |
-        python scraper.py
-
-    - name: Clean up
-      run: rm -f firebase-credentials.json  # Entfernt die Firebase-Credentials-Datei nach der Ausführung
+      # Run the Python script
+      - name: Run scraper
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: firebase-credentials.json
+        run: python scraper.py
