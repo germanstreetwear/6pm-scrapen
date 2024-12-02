@@ -22,6 +22,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Debug Firebase Key
+        env:
+          FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
+        run: |
+          echo "Length of FIREBASE_KEY: ${#FIREBASE_KEY}"
+          echo "Starts with: ${FIREBASE_KEY:0:10}..."
+          echo "Ends with: ...${FIREBASE_KEY: -10}"
+
       - name: Run Scraper
         env:
           FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
